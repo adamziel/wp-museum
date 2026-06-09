@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Editor Through Time · WordPress, 2004 → 2024</title>
 <meta name="description" content="Writing one blog post in WordPress — from the 2004 textarea to the 2024 block editor. Each era's real editor boots live in your browser via WordPress Playground.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -79,9 +80,13 @@
   footer a{color:#9b95a8; text-underline-offset:2px;}
   .full{color:var(--accent);}
   @media (max-width:640px){ .strip{grid-template-columns:repeat(6,1fr);} .dot__v{display:none;} .annot{flex-direction:column; gap:4px;} }
+
+  .museum-home{position:fixed;z-index:80;top:14px;left:14px;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(12,11,16,.78);color:#fff4df;border:1px solid rgba(255,255,255,.24);text-decoration:none;font:800 12px/1 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;backdrop-filter:blur(10px);box-shadow:0 10px 26px rgba(0,0,0,.28)}
+  .museum-home:hover,.museum-home:focus-visible{background:#fff4df;color:#08070c;outline:2px solid var(--accent, var(--wp));outline-offset:2px}
 </style>
 </head>
 <body>
+  <a class="museum-home" href="index.html">← museum browser</a>
   <header class="top">
     <p class="eyebrow">◉ THE EDITOR THROUGH TIME</p>
     <h1>Writing one post,<br><i>2004 → 2024.</i></h1>

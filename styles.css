@@ -493,3 +493,15 @@ body:has(.panel.is-live) .brand { opacity: 0; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+/* Museum idea browser link — keeps this experiment safely connected to the lobby. */
+.museum-home{
+  position:fixed; z-index:80; top:14px; left:14px;
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 12px; border-radius:999px;
+  background:rgba(8,7,12,.78); color:#fff4df; border:1px solid rgba(255,255,255,.24);
+  text-decoration:none; font:800 12px/1 "Bricolage Grotesque",system-ui,sans-serif;
+  letter-spacing:.08em; text-transform:uppercase; backdrop-filter:blur(10px);
+  box-shadow:0 10px 26px rgba(0,0,0,.28);
+}
+.museum-home:hover,.museum-home:focus-visible{background:#fff4df;color:#08070c;outline:2px solid #ffd34d;outline-offset:2px}

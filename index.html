@@ -2,81 +2,64 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>WordPress Museum · Tune Through Time</title>
-  <meta name="description" content="An interactive museum you travel through, not scroll. Fourteen WordPress releases, each rendered in the web-design language of its year — with a one-click portal into WordPress Playground. Scrub the deck and listen to history.">
-  <meta name="color-scheme" content="dark">
-  <meta property="og:title" content="WordPress Museum · Tune Through Time">
-  <meta property="og:description" content="A playable, era-accurate tour through WordPress history. Scroll, swipe, or scrub the deck to travel.">
-
+  <title>WordPress Museum · Idea Browser</title>
+  <meta name="description" content="A safe browser for multiple WordPress Museum experiments: time travel, live playground capsules, editor history, and a Warhol-inspired pop-art gallery.">
+  <meta name="color-scheme" content="light">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Bricolage+Grotesque:wght@400;600;700;800&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="museum-browser.css">
 </head>
-<body class="is-booting" data-era="intro">
-  <a class="skip" href="#deck">Skip to the deck</a>
-
-  <!-- ambient backdrop: tint interpolates between adjacent eras as you travel -->
-  <div class="backdrop" aria-hidden="true">
-    <div class="backdrop__tint" id="backdrop-tint"></div>
-    <div class="backdrop__vignette"></div>
-    <div class="backdrop__grain"></div>
-  </div>
-
-  <!-- tuning static: flashes over the focused room when a new station locks in -->
-  <div class="static" id="backdrop-static" aria-hidden="true"></div>
-
-  <!-- tiny brand mark, not a nav -->
-  <div class="brand" aria-hidden="true">
-    <span class="brand__mark"><i></i><i></i><i></i><i></i></span>
-    <span class="brand__txt">WP&nbsp;MUSEUM</span>
-  </div>
-
-  <!-- the horizontal time track: panels injected by app.js -->
-  <main id="track" class="track" tabindex="-1" aria-label="WordPress release rooms — travel left and right"></main>
-
-  <!-- persistent control deck / tuner HUD -->
-  <footer id="deck" class="deck" role="region" aria-label="Museum control deck">
-    <div class="deck__left">
-      <div class="deck__odo" aria-hidden="true">
-        <span class="deck__odoLabel">YEAR</span>
-        <span class="deck__digits" id="deck-year">2003</span>
+<body>
+  <main class="browser">
+    <section class="hero" aria-labelledby="title">
+      <div>
+        <p class="kicker">WordPress Museum / safe idea browser</p>
+        <h1 id="title">Choose the door.</h1>
+        <p class="lede">The museum is now a lobby, not a trapdoor. Every experiment lives at its own URL, so we can wander, compare, replace, and remix without losing the working pieces.</p>
       </div>
-      <div class="deck__now">
-        <span class="deck__ver" id="deck-ver">—</span>
-        <span class="deck__code" id="deck-code">insert release</span>
-        <span class="deck__muso" id="deck-muso">scrub the deck to begin</span>
+      <div class="hero__ticket" aria-hidden="true">
+        <div class="ticket">
+          <div class="ticket__stamp">BROWSABLE</div>
+          <div class="ticket__mark">WP<br>∞</div>
+          <div class="ticket__fine">admit one browser / many museums / no forced march</div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="deck__center">
-      <div class="deck__vu" aria-hidden="true">
-        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-      </div>
-      <div class="deck__rail" id="deck-rail" role="group" aria-label="Release timeline — jump to a release">
-        <div class="deck__track"></div>
-        <div class="deck__playhead" id="deck-playhead" aria-hidden="true"></div>
-        <!-- ticks injected by app.js -->
-      </div>
-    </div>
-
-    <div class="deck__right">
-      <a class="deck__play is-hidden" id="deck-play" href="#" target="_blank" rel="noopener">
-        <span class="deck__playGlyph" aria-hidden="true">▶</span>
-        <span class="deck__playTxt">PLAY</span>
+    <section class="grid" aria-label="Museum ideas">
+      <a class="card card--wide card--tall" style="--c:#ff3f8a;--r:-1.8deg" data-no="01" href="warhol-factory.html">
+        <div class="card__type">new painting</div>
+        <h2>Warhol Factory</h2>
+        <p>Ten WordPress releases silk-screened into loud pop-art editions: cans, grids, celebrity color, halftone ghosts, and Playground portals.</p>
+        <span class="card__go">enter the factory →</span>
       </a>
-    </div>
-  </footer>
 
-  <!-- travel-hint, fades after first move -->
-  <p class="hint" id="hint" aria-hidden="true">
-    <span class="hint__key">scroll</span> · <span class="hint__key">swipe</span> · <span class="hint__key">◂ ▸</span> · drag the deck — to travel through time
-  </p>
+      <a class="card" style="--c:#3858e9;--r:1.2deg" data-no="02" href="tune-through-time.html">
+        <div class="card__type">current odyssey</div>
+        <h2>Tune Through Time</h2>
+        <p>A horizontal tuner deck: scrub years, lock onto releases, and boot WordPress versions like radio stations.</p>
+        <span class="card__go">tune in →</span>
+      </a>
 
-  <div class="sr-only" aria-live="polite" id="live"></div>
+      <a class="card" style="--c:#ff6b2c;--r:-.8deg" data-no="03" href="editor-through-time.html">
+        <div class="card__type">focused exhibit</div>
+        <h2>Editor Through Time</h2>
+        <p>One writing surface, many eras: from textarea to block editor, with live Playground windows.</p>
+        <span class="card__go">write history →</span>
+      </a>
 
-  <script src="app.js"></script>
+      <a class="card card--wide" style="--c:#37d67a;--r:.8deg" data-no="04" href="time-capsules.html">
+        <div class="card__type">playable launcher</div>
+        <h2>Time Capsules</h2>
+        <p>Fast one-click booters for real WordPress builds: disposable, sandboxed, and made for poking around.</p>
+        <span class="card__go">boot capsules →</span>
+      </a>
+    </section>
+
+    <p class="notice"><span>Routing note: GitHub Pages serves this lobby from <code>/wp-museum/</code>; each idea has a stable file so experiments can evolve safely.</span><span>Next up: more doors, fewer slide decks.</span></p>
+  </main>
 </body>
 </html>
