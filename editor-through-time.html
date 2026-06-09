@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Editor Through Time · WordPress, 2004 → 2024</title>
+<meta name="description" content="Writing one blog post in WordPress — from the 2004 textarea to the 2024 block editor. Each era's real editor boots live in your browser via WordPress Playground.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..600&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0b10; --ink:#f3eee6; --muted:#9b95a8; --line:#2a2734;
+    --accent:#ff5a4d;
+    --font-disp:"Fraunces","Iowan Old Style",Georgia,serif;
+    --font-mono:"VT323","Courier New",monospace;
+    --font-ui:"Helvetica Neue",system-ui,sans-serif;
+    --stage-max: 1040px;
+  }
+  *{box-sizing:border-box;} html,body{margin:0;height:100%;}
+  body{background:
+      radial-gradient(900px 500px at 80% -10%, #211a2e 0%, transparent 60%),
+      radial-gradient(800px 600px at 0% 110%, #1a1426 0%, transparent 55%), var(--bg);
+    color:var(--ink); font-family:var(--font-ui); display:flex; flex-direction:column; min-height:100%;}
+  a{color:inherit;}
+
+  header.top{padding:26px clamp(18px,4vw,48px) 8px; max-width:var(--stage-max); margin:0 auto; width:100%;}
+  .eyebrow{font-family:var(--font-mono); font-size:18px; letter-spacing:.18em; color:var(--accent); margin:0;}
+  h1{font-family:var(--font-disp); font-weight:600; font-size:clamp(30px,5.5vw,58px); line-height:1; letter-spacing:-.02em; margin:6px 0 6px;}
+  h1 i{font-style:italic; color:#ffd7c2;}
+  .dek{color:var(--muted); max-width:64ch; line-height:1.5; margin:0; font-size:clamp(14px,1.6vw,16px);}
+  .dek b{color:#d9d3e6; font-weight:600;}
+
+  main{flex:1; display:flex; flex-direction:column; gap:14px; padding:14px clamp(18px,4vw,48px) 8px; max-width:var(--stage-max); margin:0 auto; width:100%;}
+
+  /* the screen */
+  .stage{position:relative; width:100%; aspect-ratio:16/10; max-height:62vh; border-radius:12px; overflow:hidden;
+    background:#07060a; border:1px solid var(--line);
+    box-shadow:0 30px 70px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.03);}
+  .stage__poster{position:absolute; inset:0; display:grid; place-content:center; text-align:center; gap:6px; padding:24px;
+    background:radial-gradient(120% 90% at 50% 30%, color-mix(in srgb,var(--accent) 16%, #0b0a0f), #07060a);}
+  .stage.is-live .stage__poster{display:none;}
+  .p__yr{font-family:var(--font-mono); font-size:22px; letter-spacing:.3em; color:var(--accent);}
+  .p__ttl{font-family:var(--font-disp); font-size:clamp(28px,5vw,52px); font-weight:600; line-height:1;}
+  .p__sub{color:var(--muted); max-width:46ch; margin:6px auto 14px; line-height:1.5;}
+  .boot{display:inline-flex; align-items:center; gap:10px; justify-self:center; cursor:pointer;
+    font-family:var(--font-mono); font-size:24px; letter-spacing:.04em; color:#0c0b10; font-weight:700;
+    background:var(--accent); border:0; border-radius:999px; padding:10px 26px;
+    box-shadow:0 0 30px color-mix(in srgb,var(--accent) 55%, transparent); transition:transform .15s ease;}
+  .boot:hover{transform:translateY(-1px) scale(1.03);}
+  .boot__pwr{font-size:18px;}
+  .p__note{color:#6f6982; font-size:12px; font-family:var(--font-mono); letter-spacing:.05em;}
+  .stage__frame{position:absolute; inset:0; width:100%; height:100%; border:0; background:#fff;}
+  .stage__loading{position:absolute; inset:0; display:none; place-content:center; text-align:center; gap:12px;
+    background:#07060a; color:var(--muted); font-family:var(--font-mono); font-size:20px; letter-spacing:.08em;}
+  .stage.is-booting .stage__loading{display:grid;}
+  .spin{width:34px;height:34px;border-radius:50%;border:3px solid #2a2734;border-top-color:var(--accent);margin:0 auto;animation:spin 1s linear infinite;}
+  @keyframes spin{to{transform:rotate(1turn);}}
+
+  /* annotation */
+  .annot{display:flex; gap:14px; align-items:baseline; min-height:42px;}
+  .annot__k{font-family:var(--font-mono); font-size:20px; color:var(--accent); letter-spacing:.06em; white-space:nowrap;}
+  .annot__d{color:#cfc9dc; line-height:1.5; font-size:clamp(14px,1.6vw,16px);}
+
+  /* filmstrip timeline */
+  .strip{position:relative; display:grid; grid-template-columns:repeat(6,1fr); gap:0; margin:6px 0 0;
+    border-top:1px solid var(--line); padding-top:18px;}
+  .strip::before{content:""; position:absolute; left:6%; right:6%; top:18px; height:2px; background:var(--line);}
+  .dot{position:relative; display:flex; flex-direction:column; align-items:center; gap:7px; cursor:pointer; background:none; border:0; color:var(--muted); padding:0; font:inherit;}
+  .dot__pin{width:14px;height:14px;border-radius:50%; background:#1c1926; border:2px solid #45405a; transition:all .18s ease; position:relative; z-index:1;}
+  .dot:hover .dot__pin{border-color:var(--accent);}
+  .dot.is-on .dot__pin{background:var(--accent); border-color:var(--accent); box-shadow:0 0 14px color-mix(in srgb,var(--accent) 70%, transparent); transform:scale(1.25);}
+  .dot__yr{font-family:var(--font-mono); font-size:18px; letter-spacing:.04em;}
+  .dot__v{font-size:11px; opacity:.7;}
+  .dot.is-on .dot__yr{color:var(--ink);} .dot.is-on .dot__v{color:var(--accent); opacity:1;}
+
+  footer{padding:14px clamp(18px,4vw,48px) 22px; max-width:var(--stage-max); margin:0 auto; width:100%;
+    color:#6f6982; font-size:12px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; font-family:var(--font-mono); letter-spacing:.04em;}
+  footer a{color:#9b95a8; text-underline-offset:2px;}
+  .full{color:var(--accent);}
+  @media (max-width:640px){ .strip{grid-template-columns:repeat(6,1fr);} .dot__v{display:none;} .annot{flex-direction:column; gap:4px;} }
+</style>
+</head>
+<body>
+  <header class="top">
+    <p class="eyebrow">◉ THE EDITOR THROUGH TIME</p>
+    <h1>Writing one post,<br><i>2004 → 2024.</i></h1>
+    <p class="dek">Twenty years of typing the same blog post. Pick a year and the <b>real WordPress editor of that era boots live in your browser</b> — no install, no screenshots — courtesy of WordPress Playground. Watch a textarea become TinyMCE become Gutenberg.</p>
+  </header>
+
+  <main>
+    <div class="stage" id="stage">
+      <div class="stage__poster" id="poster"></div>
+      <div class="stage__loading"><div><div class="spin"></div><div id="loadlbl">booting…</div></div></div>
+    </div>
+
+    <div class="annot">
+      <span class="annot__k" id="annotK">—</span>
+      <span class="annot__d" id="annotD">Select a year below to boot its editor.</span>
+    </div>
+
+    <div class="strip" id="strip"></div>
+  </main>
+
+  <footer>
+    <span>Real WordPress, running in-browser via <a href="https://wordpress.github.io/wordpress-playground/" target="_blank" rel="noopener">WordPress&nbsp;Playground</a>.</span>
+    <a class="full" id="openFull" href="#" target="_blank" rel="noopener">open this editor in full Playground ↗</a>
+  </footer>
+
+<script>
+(() => {
+  "use strict";
+  const MILES = [
+    { v:'1.2', php:'5.2', yr:2004, t:'The textarea',          d:'A plain HTML textarea with “quicktags”. You wrote posts in raw markup and hoped the tags balanced.' },
+    { v:'2.0', php:'5.2', yr:2005, t:'TinyMCE arrives',       d:'WordPress 2.0 embedded the TinyMCE rich-text editor — bold and italic without typing a single tag.' },
+    { v:'2.7', php:'5.2', yr:2008, t:'The Crazyhorse rewrite',d:'The redesigned write screen: the left-rail admin and editing layout WordPress kept for a decade.' },
+    { v:'3.8', php:'5.2', yr:2013, t:'Flat & responsive',     d:'MP6 brought a flat, full-height editor that finally worked properly on a phone.' },
+    { v:'5.0', php:'7.2', yr:2018, t:'Gutenberg: blocks',     d:'The editor became a canvas of blocks — the most divisive change in WordPress history.' },
+    { v:'6.5', php:'8.2', yr:2024, t:'The block era, matured',d:'Block editor, Site Editor and a real Font Library. Writing and site-building finally converge.' }
+  ];
+
+  // The SAME post, seeded into every era. We overwrite post #1 ("Hello world!"),
+  // which exists in every WordPress version, via a SQL step (the wp_posts schema
+  // is identical from 1.x to today, so no version-specific PHP bootstrap needed),
+  // then land on its edit screen. Block-comment markup renders as rich blocks in
+  // Gutenberg and as plain HTML in the classic/TinyMCE/textarea editors.
+  // NB: keep the content free of apostrophes/semicolons so the SQL string stays valid.
+  const SEED_SQL =
+    "UPDATE wp_posts SET " +
+    "post_title = 'Hello, Dolly: the post through time', " +
+    "post_content = '" +
+      "<!-- wp:heading --><h2>Hello, Dolly</h2><!-- /wp:heading -->\n\n" +
+      "<!-- wp:paragraph --><p>This is the same blog post, opened in every WordPress editor from 2004 to today. The words never change. Only the editor around them does.</p><!-- /wp:paragraph -->\n\n" +
+      "<!-- wp:paragraph --><p>In 2004 you typed raw HTML into a textarea. By 2018 you were stacking blocks. Travel the timeline and watch this very paragraph move through twenty years of WordPress.</p><!-- /wp:paragraph -->\n\n" +
+      "<!-- wp:quote --><blockquote class=\"wp-block-quote\"><p>Code is poetry.</p></blockquote><!-- /wp:quote -->" +
+    "' WHERE ID = 1;";
+
+  function blueprint(m){
+    return {
+      preferredVersions: { php: m.php, wp: m.v },
+      login: true,
+      landingPage: "/wp-admin/post.php?post=1&action=edit",
+      steps: [ { step:"runSql", sql:{ resource:"literal", name:"seed.sql", contents: SEED_SQL } } ]
+    };
+  }
+  const url = (m, seamless) =>
+    "https://playground.wordpress.net/" + (seamless ? "?mode=seamless" : "")
+    + "#" + encodeURIComponent(JSON.stringify(blueprint(m)));
+
+  const stage = document.getElementById('stage');
+  const poster = document.getElementById('poster');
+  const strip = document.getElementById('strip');
+  const annotK = document.getElementById('annotK');
+  const annotD = document.getElementById('annotD');
+  const openFull = document.getElementById('openFull');
+  const loadlbl = document.getElementById('loadlbl');
+  let cur = 0;
+
+  strip.innerHTML = MILES.map((m,i)=>`
+    <button class="dot" data-i="${i}" aria-label="${m.yr} — WordPress ${m.v}">
+      <span class="dot__pin"></span><span class="dot__yr">${m.yr}</span><span class="dot__v">WP ${m.v}</span>
+    </button>`).join('');
+
+  function select(i){
+    cur = i; const m = MILES[i];
+    document.querySelectorAll('.dot').forEach((d,di)=>d.classList.toggle('is-on', di===i));
+    annotK.textContent = `WP ${m.v}`;
+    annotD.textContent = m.d;
+    openFull.href = url(m, false);
+    // tear down any running boot, show the poster for this era
+    const f = stage.querySelector('.stage__frame'); if (f) f.remove();
+    stage.classList.remove('is-live','is-booting');
+    poster.innerHTML = `
+      <span class="p__yr">${m.yr}</span>
+      <span class="p__ttl">${m.t}</span>
+      <span class="p__sub">WordPress ${m.v} · ${m.d}</span>
+      <button class="boot" id="bootBtn"><span class="boot__pwr">⏻</span> Boot this editor, live</button>
+      <span class="p__note">real WordPress ${m.v} · runs in your browser · ~a few seconds</span>`;
+    document.getElementById('bootBtn').addEventListener('click', ()=>boot(m));
+  }
+
+  function boot(m){
+    if (stage.querySelector('.stage__frame')) return;
+    loadlbl.textContent = `booting WordPress ${m.v}…`;
+    stage.classList.add('is-booting','is-live');
+    const f = document.createElement('iframe');
+    f.className = 'stage__frame';
+    f.title = `WordPress ${m.v} editor — live`;
+    f.setAttribute('allow','clipboard-read; clipboard-write; fullscreen');
+    f.src = url(m, true);
+    f.addEventListener('load', ()=>stage.classList.remove('is-booting'));
+    stage.appendChild(f);
+  }
+
+  strip.addEventListener('click', e => {
+    const b = e.target.closest('.dot'); if (b) select(+b.dataset.i);
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') select(Math.min(cur+1, MILES.length-1));
+    else if (e.key === 'ArrowLeft') select(Math.max(cur-1, 0));
+  });
+
+  select(0);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WordPress Time Capsules · boot a real WordPress in one click</title>
+<meta name="description" content="A launcher of one-click, fully playable WordPress sites — from a 2004 build to today's block editor, the REST API, and tonight's nightly — each boots live in your browser via WordPress Playground.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f1ea; --panel:#ffffff; --ink:#16131f; --muted:#6c6678; --line:#e6e0d4;
+    --wp:#3858e9;
+    --font-disp:"Space Grotesk",system-ui,sans-serif;
+    --font-mono:"VT323","Courier New",monospace;
+  }
+  *{box-sizing:border-box;} html,body{margin:0; min-height:100%;}
+  body{background:
+      radial-gradient(900px 480px at 88% -8%, #e7ecff 0%, transparent 60%),
+      radial-gradient(700px 500px at -5% 105%, #ffece4 0%, transparent 55%), var(--bg);
+    color:var(--ink); font-family:var(--font-disp); -webkit-font-smoothing:antialiased;}
+  a{color:inherit;}
+
+  .wrap{max-width:1120px; margin:0 auto; padding:clamp(28px,5vw,56px) clamp(18px,4vw,40px) 60px;}
+  .eyebrow{font-family:var(--font-mono); font-size:19px; letter-spacing:.16em; color:var(--wp); margin:0;}
+  h1{font-size:clamp(32px,6vw,60px); font-weight:700; letter-spacing:-.03em; line-height:1.02; margin:8px 0 12px; max-width:18ch;}
+  .dek{color:var(--muted); max-width:62ch; line-height:1.55; font-size:clamp(15px,1.7vw,18px); margin:0 0 8px;}
+  .dek b{color:var(--ink);}
+  .by{font-family:var(--font-mono); font-size:16px; color:#8a8498; letter-spacing:.04em; margin-top:6px;}
+
+  .grid{display:grid; gap:16px; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); margin-top:34px;}
+  .card{position:relative; background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:20px;
+    display:flex; flex-direction:column; gap:8px; text-align:left; cursor:pointer; overflow:hidden;
+    box-shadow:0 1px 2px rgba(20,10,40,.05); transition:transform .16s ease, box-shadow .2s ease, border-color .2s ease;}
+  .card:hover{transform:translateY(-3px); box-shadow:0 18px 40px rgba(40,30,80,.14); border-color:color-mix(in srgb,var(--c) 60%, var(--line));}
+  .card::before{content:""; position:absolute; inset:0 0 auto 0; height:4px; background:var(--c);}
+  .card__badge{align-self:flex-start; font-family:var(--font-mono); font-size:16px; letter-spacing:.1em; text-transform:uppercase;
+    color:#fff; background:var(--c); border-radius:999px; padding:2px 12px; margin-top:4px;}
+  .card__title{font-size:21px; font-weight:700; letter-spacing:-.01em;}
+  .card__sub{color:var(--muted); line-height:1.5; font-size:14px; flex:1;}
+  .card__meta{font-family:var(--font-mono); font-size:15px; color:#9b94a8; letter-spacing:.03em;}
+  .card__go{display:inline-flex; align-items:center; gap:8px; align-self:flex-start; margin-top:6px;
+    font-weight:700; font-size:14px; color:var(--c);}
+  .card__go::after{content:"→"; transition:transform .15s ease;}
+  .card:hover .card__go::after{transform:translateX(4px);}
+
+  /* live boot overlay */
+  .stage{position:fixed; inset:0; z-index:50; background:#0c0b10; display:none; flex-direction:column;}
+  .stage.is-open{display:flex;}
+  .stage__bar{display:flex; align-items:center; gap:14px; padding:10px 16px; background:#16131f; color:#f3eee6; flex:0 0 auto;}
+  .stage__back{font-family:var(--font-mono); font-size:18px; letter-spacing:.04em; cursor:pointer; background:#26222f; border:1px solid #39333f; color:#f3eee6; border-radius:8px; padding:6px 14px;}
+  .stage__back:hover{background:#322c3d;}
+  .stage__ttl{font-weight:700;} .stage__ttl b{color:#9b94a8; font-weight:400;}
+  .stage__sp{flex:1;}
+  .stage__ext{font-family:var(--font-mono); font-size:16px; color:#b9b3c6; letter-spacing:.04em;}
+  .stage__wrap{position:relative; flex:1; min-height:0; background:#fff;}
+  .stage__frame{position:absolute; inset:0; width:100%; height:100%; border:0;}
+  .stage__load{position:absolute; inset:0; display:grid; place-content:center; text-align:center; gap:14px; background:#0c0b10; color:#9b94a8; font-family:var(--font-mono); font-size:20px; letter-spacing:.06em;}
+  .stage.is-ready .stage__load{display:none;}
+  .spin{width:36px;height:36px;border-radius:50%;border:3px solid #2a2734;border-top-color:var(--wp);margin:0 auto;animation:spin 1s linear infinite;}
+  @keyframes spin{to{transform:rotate(1turn);}}
+
+  footer{max-width:1120px; margin:0 auto; padding:0 clamp(18px,4vw,40px) 40px; color:#8a8498; font-family:var(--font-mono); font-size:15px; letter-spacing:.03em;}
+  footer a{color:var(--wp);}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="eyebrow">◳ WORDPRESS TIME CAPSULES</p>
+    <h1>Boot a real WordPress in one click.</h1>
+    <p class="dek">Each capsule spins up an actual, fully interactive WordPress site <b>live in your browser</b> — a 2004 build, a Gutenberg editor, the REST API, tonight's nightly — with nothing to install. Click one and start clicking around.</p>
+    <p class="by">disposable · sandboxed · powered by WordPress Playground</p>
+
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="stage__bar">
+      <button class="stage__back" id="back">← capsules</button>
+      <span class="stage__ttl" id="stageTtl"></span>
+      <span class="stage__sp"></span>
+      <a class="stage__ext" id="ext" href="#" target="_blank" rel="noopener">open in new tab ↗</a>
+    </div>
+    <div class="stage__wrap" id="wrap">
+      <div class="stage__load"><div><div class="spin"></div><div id="loadlbl">booting…</div></div></div>
+    </div>
+  </div>
+
+  <footer>Real WordPress, sandboxed in your browser via <a href="https://wordpress.github.io/wordpress-playground/" target="_blank" rel="noopener">WordPress&nbsp;Playground</a>. Nothing is saved; close the tab and it's gone.</footer>
+
+<script>
+(() => {
+  "use strict";
+  const CAPS = [
+    { badge:'2004', c:'#c0531f', title:'The original platform', sub:'WordPress 1.2 “Mingus” — the b2 lineage, the first plugins, Hello Dolly. The whole thing, running.', meta:'wp 1.2 · php 5.2', p:{wp:'1.2',php:'5.2',login:'yes',url:'/wp-admin/'} },
+    { badge:'2005', c:'#2f6db0', title:'A Kubrick blog', sub:'WordPress 1.5 booted to its front page — the blue-skied default theme that defined the blog era.', meta:'wp 1.5 · php 5.2', p:{wp:'1.5',php:'5.2',url:'/'} },
+    { badge:'2010', c:'#8a5a22', title:'Twenty Ten', sub:'WordPress 3.0 — multisite arrives and the first “named-after-the-year” default theme ships.', meta:'wp 3.0 · php 5.2', p:{wp:'3.0',php:'5.2',url:'/'} },
+    { badge:'editor', c:'#3858e9', title:'The Gutenberg editor', sub:'Drop straight into the modern block editor on a fresh post and start stacking blocks.', meta:'wp 6.5 · php 8.2', p:{wp:'6.5',php:'8.2',login:'yes',url:'/wp-admin/post-new.php'} },
+    { badge:'2022', c:'#6b54c8', title:'Full Site Editing', sub:'Open the Site Editor and rearrange an entire block theme — headers, footers, templates and all.', meta:'wp 6.5 · php 8.2', p:{wp:'6.5',php:'8.2',login:'yes',url:'/wp-admin/site-editor.php'} },
+    { badge:'classic', c:'#1a8f6f', title:'Classic editor', sub:'Latest WordPress with the Classic Editor plugin installed — TinyMCE, the way some still like it.', meta:'+ classic-editor', p:{wp:'6.5',php:'8.2',plugin:'classic-editor',login:'yes',url:'/wp-admin/post-new.php'} },
+    { badge:'api', c:'#0a8a8a', title:'Headless / REST', sub:'Hit the live REST API and see WordPress as a JSON back-end you can build anything on.', meta:'/wp-json', p:{wp:'6.5',php:'8.2',url:'/wp-json/wp/v2/posts'} },
+    { badge:'theme', c:'#b3733a', title:'Twenty Sixteen', sub:'A classic blog theme fetched from the directory, installed, and live on the front end.', meta:'+ twentysixteen', p:{wp:'6.5',php:'8.2',theme:'twentysixteen',url:'/'} },
+    { badge:'edge', c:'#d23c6e', title:'Bleeding edge', sub:'Tonight’s WordPress nightly build — try what ships next, before it ships.', meta:'wp nightly · php 8.3', p:{wp:'nightly',php:'8.3',login:'yes',url:'/wp-admin/'} }
+  ];
+
+  const build = (p, seamless) => {
+    const o = { ...p };
+    if (seamless) o.mode = 'seamless';
+    const q = Object.keys(o).map(k => `${k}=${encodeURIComponent(o[k])}`).join('&');
+    return 'https://playground.wordpress.net/?' + q;
+  };
+
+  const grid = document.getElementById('grid');
+  const stage = document.getElementById('stage');
+  const wrap = document.getElementById('wrap');
+  const back = document.getElementById('back');
+  const ext = document.getElementById('ext');
+  const ttl = document.getElementById('stageTtl');
+  const loadlbl = document.getElementById('loadlbl');
+
+  grid.innerHTML = CAPS.map((c,i)=>`
+    <button class="card" data-i="${i}" style="--c:${c.c}">
+      <span class="card__badge">${c.badge}</span>
+      <span class="card__title">${c.title}</span>
+      <span class="card__sub">${c.sub}</span>
+      <span class="card__meta">${c.meta}</span>
+      <span class="card__go">Boot it</span>
+    </button>`).join('');
+
+  function open(i){
+    const c = CAPS[i];
+    ttl.innerHTML = `${c.title} <b>· ${c.meta}</b>`;
+    ext.href = build(c.p, false);
+    loadlbl.textContent = `booting WordPress…`;
+    stage.classList.add('is-open');
+    stage.classList.remove('is-ready');
+    document.body.style.overflow = 'hidden';
+    const old = wrap.querySelector('.stage__frame'); if (old) old.remove();
+    const f = document.createElement('iframe');
+    f.className = 'stage__frame';
+    f.title = `${c.title} — live WordPress`;
+    f.setAttribute('allow','clipboard-read; clipboard-write; fullscreen');
+    f.src = build(c.p, true);
+    f.addEventListener('load', ()=>stage.classList.add('is-ready'));
+    wrap.appendChild(f);
+  }
+  function close(){
+    stage.classList.remove('is-open','is-ready');
+    document.body.style.overflow = '';
+    const f = wrap.querySelector('.stage__frame'); if (f) f.remove();
+  }
+
+  grid.addEventListener('click', e => { const b = e.target.closest('.card'); if (b) open(+b.dataset.i); });
+  back.addEventListener('click', close);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+</script>
+</body>
+</html>
