@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>WordPress Museum · Tune Through Time</title>
+  <meta name="description" content="An interactive museum you travel through, not scroll. Fourteen WordPress releases, each rendered in the web-design language of its year — with a one-click portal into WordPress Playground. Scrub the deck and listen to history.">
+  <meta name="color-scheme" content="dark">
+  <meta property="og:title" content="WordPress Museum · Tune Through Time">
+  <meta property="og:description" content="A playable, era-accurate tour through WordPress history. Scroll, swipe, or scrub the deck to travel.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Bricolage+Grotesque:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="is-booting" data-era="intro">
+  <a class="skip" href="#deck">Skip to the deck</a>
+
+  <!-- ambient backdrop: tint interpolates between adjacent eras as you travel -->
+  <div class="backdrop" aria-hidden="true">
+    <div class="backdrop__tint" id="backdrop-tint"></div>
+    <div class="backdrop__vignette"></div>
+    <div class="backdrop__grain"></div>
+  </div>
+
+  <!-- tuning static: flashes over the focused room when a new station locks in -->
+  <div class="static" id="backdrop-static" aria-hidden="true"></div>
+
+  <!-- tiny brand mark, not a nav -->
+  <div class="brand" aria-hidden="true">
+    <span class="brand__mark"><i></i><i></i><i></i><i></i></span>
+    <span class="brand__txt">WP&nbsp;MUSEUM</span>
+  </div>
+
+  <!-- the horizontal time track: panels injected by app.js -->
+  <main id="track" class="track" tabindex="-1" aria-label="WordPress release rooms — travel left and right"></main>
+
+  <!-- persistent control deck / tuner HUD -->
+  <footer id="deck" class="deck" role="region" aria-label="Museum control deck">
+    <div class="deck__left">
+      <div class="deck__odo" aria-hidden="true">
+        <span class="deck__odoLabel">YEAR</span>
+        <span class="deck__digits" id="deck-year">2003</span>
+      </div>
+      <div class="deck__now">
+        <span class="deck__ver" id="deck-ver">—</span>
+        <span class="deck__code" id="deck-code">insert release</span>
+        <span class="deck__muso" id="deck-muso">scrub the deck to begin</span>
+      </div>
+    </div>
+
+    <div class="deck__center">
+      <div class="deck__vu" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="deck__rail" id="deck-rail" role="group" aria-label="Release timeline — jump to a release">
+        <div class="deck__track"></div>
+        <div class="deck__playhead" id="deck-playhead" aria-hidden="true"></div>
+        <!-- ticks injected by app.js -->
+      </div>
+    </div>
+
+    <div class="deck__right">
+      <a class="deck__play is-hidden" id="deck-play" href="#" target="_blank" rel="noopener">
+        <span class="deck__playGlyph" aria-hidden="true">▶</span>
+        <span class="deck__playTxt">PLAY</span>
+      </a>
+    </div>
+  </footer>
+
+  <!-- travel-hint, fades after first move -->
+  <p class="hint" id="hint" aria-hidden="true">
+    <span class="hint__key">scroll</span> · <span class="hint__key">swipe</span> · <span class="hint__key">◂ ▸</span> · drag the deck — to travel through time
+  </p>
+
+  <div class="sr-only" aria-live="polite" id="live"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
